@@ -1,0 +1,63 @@
+________________________
+BUILDING CIFSD TOOLS
+________________________
+
+Install preprequisite packages:
+	For Ubuntu:
+	sudo apt-get install autoconf libtool pkg-config libnl-3-dev \
+	libnl-genl-3-dev
+
+	For Fedora, RHEL:
+	sudo yum install autoconf automake libtool glib2-devl libnl3-devl
+
+	For CentOS:
+	sudo yum install glib2-devel libnl3-devel
+
+Build steps:
+        - cd into the cifsd-tools directory
+        - ./autogen.sh
+        - ./configure
+        - make
+        - make install
+
+_____________________
+USING CIFSD TOOLS
+_____________________
+
+Setup steps:
+	- install cifsd kernel driver
+		modprobe cifsd
+	- create user/password for SMB share
+		cifsuseradd -a <Enter USERNAME for SMB share access>
+		Enter password for SMB share access
+	- create /etc/cifs/smb.conf file, add SMB share in smb.conf file
+		Refer smb.conf.example
+	- start cifsd user space daemon
+		cifsd
+	- access share from Windows or Linux using CIFS
+
+--------------------
+ADMIN TOOLS
+--------------------
+
+- cifsuseradd
+	Adds, updates or removes (-a/-u/-d) a user from cifsd pwd file.
+
+- cifsshareadd
+	Adds, updates or removes (-a/-u/-d) a net share from smb.conf file.
+
+Usage example:
+
+Creating a new share:
+
+cifsshareadd -a files -o "\
+		     path=/home/users/files \
+		     comment=exported files \
+		     writeable=yes \
+		     read only = no \
+		     "
+
+Note that share options (-o) must always be enquoted ("...").
+
+cifsshareadd tool does not modify [global] smb.conf section; only net
+share configs are supported at the moment.
