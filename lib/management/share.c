@@ -712,6 +712,9 @@ int shm_handle_share_config_request(struct cifsd_share *share,
 	if (test_share_flag(share, CIFSD_SHARE_FLAG_PIPE))
 		return 0;
 
+	if (!share->path)
+		return 0;
+
 	config_payload = CIFSD_SHARE_CONFIG_VETO_LIST(resp);
 	if (resp->veto_list_sz) {
 		memcpy(config_payload,
